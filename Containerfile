@@ -1,3 +1,4 @@
+## Stage 1 : Compile program and stage dependencies
 FROM registry.access.redhat.com/ubi9/ubi:latest as compile
 MAINTAINER billy@gonoph.net
 ARG COMMAND=eatmemory
@@ -17,6 +18,7 @@ RUN make \
 	&& for i in $(ldd $COMMAND | grep / | xargs echo) ; do test -r "$i" && (mkdir -p dest/$(dirname $i) ; cp -v $i dest/$i) || true ; done \
 	&& cp -v $COMMAND dest
 
+## Stage 2 : Create the final container image
 FROM scratch
 MAINTAINER billy@gonoph.net
 ARG COMMAND=eatmemory

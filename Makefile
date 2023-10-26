@@ -28,7 +28,7 @@ debug:
 container: .container-build
 
 .container-build: Containerfile Makefile
-	podman build . --tag registry.local/gonoph/eatmemory:latest
+	buildah build --tag registry.local/gonoph/eatmemory:latest .
 	touch $@
 
 container-run: .container-build

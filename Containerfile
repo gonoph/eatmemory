@@ -1,4 +1,4 @@
-FROM registry.redhat.io/ubi9:latest as compile
+FROM registry.access.redhat.com/ubi9/ubi:latest as compile
 MAINTAINER billy@gonoph.net
 ARG COMMAND=eatmemory
 # install packages, but ensure it's only UBI content

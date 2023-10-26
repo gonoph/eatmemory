@@ -9,15 +9,50 @@ make
 ```
 
 # Usage
-You can run it without arguments or with arguments:
+You can run it without arguments or with arguments, and it will also take an ENV variable.
 
 ```bash
-./eatmemory
-Enter Megabytes to chew: 100
+./eatmemory  -h
+Usage: eatmemory [ -f | --free] [ -m metabytes | --megs megabytes ] [ -q | --quiet ] [ -h | --help ]
+    -f | --free  : attempt to only allocate free memory
+    -m | --megs  : the number of megabytes to consume (default 50%)
+                   when % is 100% or more, all available RAM will be consumed.
+    -q | --quiet : suppress output
+    -h | --help  : this help screen
 
-Consuming 100 megabytes
-./eatmemory 100
-Consuming 100 megabytes
+  ENVIRONMENT VARIABLES
+    EATMEGS      : alternative to -m / --megs
+```
+
+This is what it looks like on MacOS 14 using the free parameter:
+```bash
+./eatmemory -f
+Limiting to 50% of availble free memory: free=26; total=16384
+using 50% of available memory 26 megabytes for a target allocation of 13 megabytes
+Consuming 13 megabytes
++ Created 13 megabytes
++ Allocated 13631592 bytes
+++ Looped: 1
+++ Looped: 2
+++ Looped: 3
+++ Looped: 4
+++ Looped: 5
+++ Looped: 6
+```
+
+This is what it looks like running on a podman container with memory limits:
+```bash
+podman run --rm -it -v `pwd`:/compile:z --workdir=/compile --memory=500m registry.redhat.io/ubi9:latest ./eatmemory -f
+Limiting to 50% of availble free memory: free=500; total=500
+using 50% of available memory 500 megabytes for a target allocation of 250 megabytes
+Consuming 250 megabytes
++ detected running in a cgroup with memory limits.
++ Created 250 megabytes
++ Allocated 262146000 bytes
+++ Looped: 1
+++ Looped: 2
+++ Looped: 3
+^C[exiting] Caught signal 2
 ```
 
 # Con Kolivas kernel patch-set
@@ -46,9 +81,27 @@ Some things to note about memory allocation (at least in Linux):
 * If there is more memory allocated than can be physically given, then Linux
   fires off it's [Out of Memory Killer][3].
 
+# Updates in 2023
+I made a few updates in 2023, namely:
+
+* I broke it up into multiple files
+* Added command line parameters
+* Added detection code for cgroups for total memory and available memory on Linux
+* Added code to parse total and available memory on Darwin (it's messy)
+* Included a Containerfile in a staged build:
+  * it compiles the source.
+  * then it calculates the shared libraries and copies it and binary to a staging area.
+  * then it commits a thin image with just the binary and libraries.
+
 # Link Back
 If you end up using it, and enjoy it - then please let me know!
 
 [1]: https://lkml.org/lkml/2004/12/13/272
 [2]: https://www.kernel.org/doc/Documentation/vm/overcommit-accounting
 [3]: https://www.kernel.org/doc/gorman/html/understand/understand016.html
+
+# TODO
+
+* add a .spec file to create an rpm
+* improve the avail/total/free memory logic
+* add support for other OS/architectures

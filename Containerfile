@@ -11,7 +11,7 @@ RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
 	&& microdnf clean all \
 	&& mkdir -p /compile \
 	&& useradd compile \
-	&& chown -Rc /compile
+	&& chown -Rc compile:compile /compile
 USER	compile
 COPY	Makefile *.c *.h /compile/
 RUN	make -C /compile

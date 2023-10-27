@@ -9,16 +9,17 @@ RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
 	&& rm -f /etc/yum.repos.d/redhat.repo \ 
 	&& microdnf -y install make gcc \
 	&& microdnf clean all \
-	&& mkdir -p /compile
-RUN	ls -l && pwd
+	&& mkdir -p /compile \
+	&& useradd compile \
+	&& chown -Rc /compile
+USER	compile
 COPY	Makefile *.c *.h /compile/
-RUN	make --version
-RUN	gcc --version
 RUN	make -C /compile
-WORKDIR /compile
-RUN	mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
+USER	root
+RUN	cd /compile \
+	&& mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
 	&& cp -v /lib64/libc.so.6 /lib64/ld-linux-x86-64.so.2 dest/lib64 \
-	&& cp -v $COMMAND dest/
+	&& cp -v /compile/$COMMAND dest/
 
 ## Stage 2 : Create the final container image
 FROM scratch

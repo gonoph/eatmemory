@@ -13,7 +13,7 @@ You can run it without arguments or with arguments, and it will also take an ENV
 
 ```bash
 ./eatmemory  -h
-Usage: eatmemory [ -f | --free] [ -m metabytes | --megs megabytes ] [ -q | --quiet ] [ -h | --help ]
+Usage: eatmemory [ -f | --free] [ -m megabytes | --megs megabytes ] [ -q | --quiet ] [ -h | --help ]
     -f | --free  : attempt to only allocate free memory
     -m | --megs  : the number of megabytes to consume (default 50%)
                    when % is 100% or more, all available RAM will be consumed.

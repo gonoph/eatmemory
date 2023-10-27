@@ -12,6 +12,9 @@ RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
 	&& mkdir -p /compile
 WORKDIR /compile
 COPY	Makefile *.c *.h /compile
+RUN	make --version
+RUN	gcc --version
+RUN	ls -l
 RUN	make
 RUN	mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
 	&& cp -v /lib64/libc.so.6 /lib64/ld-linux-x86-64.so.2 dest/lib64 \

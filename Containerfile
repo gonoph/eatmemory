@@ -10,11 +10,11 @@ RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
 	&& microdnf -y install make gcc \
 	&& microdnf clean all \
 	&& mkdir -p /compile
-RUN	ls -l
-COPY	Makefile *.c *.h /compile
+RUN	ls -l && pwd
+COPY	Makefile *.c *.h /compile/
 RUN	make --version
 RUN	gcc --version
-RUN	make
+RUN	make -C /compile
 WORKDIR /compile
 RUN	mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
 	&& cp -v /lib64/libc.so.6 /lib64/ld-linux-x86-64.so.2 dest/lib64 \

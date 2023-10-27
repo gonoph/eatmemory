@@ -7,15 +7,20 @@ RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
 	&& sed -i 's/enabled=1/enabled=0/' /etc/dnf/plugins/subscription-manager.confs)  \
 	|| true \
 	&& rm -f /etc/yum.repos.d/redhat.repo \ 
-	&& microdnf -y install make gcc \
+	&& microdnf -y install make gcc findutils \
 	&& microdnf clean all \
-	&& mkdir -p /compile
-WORKDIR /compile
-COPY	Makefile *.c *.h /compile
-RUN	make
-RUN	mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
-	&& cp -v /lib64/libc.so.6 /lib64/ld-linux-x86-64.so.2 dest/lib64 \
-	&& cp -v $COMMAND dest/
+	&& mkdir -p /compile \
+	&& useradd compile \
+	&& chown -Rc compile:compile /compile
+USER	compile
+COPY	Makefile *.c *.h /compile/
+RUN	make -C /compile
+USER	root
+RUN	cd /compile \
+	&& mkdir -p dest/bin dest/proc dest/sys dest/tmp dest/lib64 \
+	&& for i in $(ldd $COMMAND | grep / | xargs echo) ; do \
+	test -r "$i" && (mkdir -p dest/$(dirname $i) ; cp -v $i dest/$i) || true ; done \
+	&& cp -v /compile/$COMMAND dest/
 
 ## Stage 2 : Create the final container image
 FROM scratch

@@ -65,6 +65,12 @@ void parse_megabytes(const char *source) {
     eat_flags.megs = megabytes;
 }
 
+#ifdef __linux__
+#include <time.h>
+// this is only defined on BSD type system
+#define srandomdev()    srandom(time(NULL))
+#endif
+
 int argparse(int argc, char **argv) {
     int ch;
     char * saved_arg_megs = NULL;

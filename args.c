@@ -14,6 +14,7 @@ static const struct option longopts[] = {
   { "megs",   required_argument, NULL, 'm' },
   { "help",   no_argument,       NULL, 'h' },
   { "quiet",  no_argument,       NULL, 'q' },
+  { "random", no_argument,       NULL, 'r' },
   { NULL,     0,                 NULL, 0 }
 };
 
@@ -24,6 +25,7 @@ void help(void) {
     -f | --free  : attempt to only allocate free memory\n\
     -m | --megs  : the number of megabytes to consume (default %s)\n\
                    when %% is 100%% or more, all available RAM will be consumed.\n\
+    -r | --random: randomize buffer in order to prevent memory compression\n\
     -q | --quiet : suppress output\n\
     -h | --help  : this help screen\n\
 \n\
@@ -66,7 +68,7 @@ void parse_megabytes(const char *source) {
 int argparse(int argc, char **argv) {
     int ch;
     char * saved_arg_megs = NULL;
-    while ((ch = getopt_long(argc, argv, "fhqm:", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "fhqm:r", longopts, NULL)) != -1) {
         switch (ch) {
             case 'f':
                 eat_flags.flag_free = 1;
@@ -76,6 +78,10 @@ int argparse(int argc, char **argv) {
                 break;
             case 'm':
                 saved_arg_megs = (char*)strdup(optarg);
+                break;
+            case 'r':
+                srandomdev();
+                eat_flags.flag_random = 1;
                 break;
             case 'h':
             default:

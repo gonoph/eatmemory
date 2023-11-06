@@ -3,5 +3,6 @@
 
 char **CreateLargeArray(unsigned long megs);
 char **CreateLargeChunk(unsigned long chunks,char **largearray);
+unsigned long mksalt(void);
 
 #endif

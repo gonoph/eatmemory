@@ -19,7 +19,7 @@
 
 const int CHUNK = 1 << 20;
 
-eat_flags_t eat_flags = { 0, 0, 0, 0, 0, 0L, 0L };
+eat_flags_t eat_flags = { 0, 0, 0, 0, 0, 0, 0L, 0L };
 
 int main(int argc,char **argv)
 {
@@ -33,6 +33,9 @@ int main(int argc,char **argv)
     argparse(argc, argv);
 
     info("Consuming %u megabytes\n", eat_flags.megs);
+
+    if (eat_flags.flag_random)
+        info("+ enabled randomizing memory\n");
 
     if (sys_info_cgroup)
         info("+ detected running in a cgroup with memory limits.\n");
@@ -50,11 +53,24 @@ int main(int argc,char **argv)
      * especially if it starts to swap */
 
     unsigned int counter = 0;
+    unsigned long refresh = 0;
     for (;;)
     {
+        if (eat_flags.flag_random) {
+            refresh = mksalt();
+        };
         for (looper1=0;looper1<eat_flags.megs;looper1++)
         {
-            memset(bigarray[looper1],48+(512 % 10),CHUNK);      /* just picked something random to throw in there */
+            if (eat_flags.flag_random) {
+                unsigned long * lbuff = (unsigned long*) bigarray[looper1];
+                int max = CHUNK / sizeof(unsigned long);
+                for (int i = 0; i < max; i++) {
+                    *lbuff = *lbuff ^ refresh;
+                    lbuff++;
+                }
+            } else {
+                memset(bigarray[looper1],'A' + (looper1 % 26) ,CHUNK); 
+            }
             FD_ZERO(&empty_stdin);
             FD_ZERO(&empty_stdout);
             FD_ZERO(&empty_stderr);

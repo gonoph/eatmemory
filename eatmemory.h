@@ -10,6 +10,7 @@ struct eat_flags_s {
   int flag_pct;
   int flag_quiet;
   int flag_free;
+  int flag_random;
   int cgroup;
   unsigned long memtotal;
   unsigned long allocated;

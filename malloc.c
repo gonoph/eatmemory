@@ -17,6 +17,14 @@ char **CreateLargeArray(unsigned long megs)
     return(largearray);
 }
 
+// return a full unsigned long random number
+unsigned long mksalt(void) {
+    unsigned long salt;
+    salt = (unsigned long) random() << 32;
+    salt += (unsigned long) random();
+    return salt;
+}
+
 char **CreateLargeChunk(unsigned long chunks,char **largearray)
 {
     unsigned long looper1;
@@ -36,8 +44,18 @@ char **CreateLargeChunk(unsigned long chunks,char **largearray)
             err("[error] Unable to malloc() %lu chunks.\n", chunks);
     }
 
-    /* set the memory to ascii(48) '0' */
-    memset(largearray[looper1],'0',CHUNK);
+    if (eat_flags.flag_random) {
+        // randomize the memory chunk
+        unsigned long * lbuff = (unsigned long*) largearray[looper1];
+        int max = CHUNK / sizeof(unsigned long);
+        for (int i = 0; i < max; i++) {
+            *lbuff = mksalt();
+            lbuff++;
+        }
+    } else {
+        /* set the memory to ascii(48) '0' */
+        memset(largearray[looper1],'0',CHUNK);
+    }
 
     eat_flags.allocated += CHUNK;
     }

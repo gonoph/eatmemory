@@ -19,6 +19,7 @@ Usage: eatmemory [ -f | --free] [ -m megabytes | --megs megabytes ] [ -q | --qui
     -f | --free  : attempt to only allocate free memory
     -m | --megs  : the number of megabytes to consume (default 50%)
                    when % is 100% or more, all available RAM will be consumed.
+    -r | --random: randomize buffer in order to prevent memory compression
     -q | --quiet : suppress output
     -h | --help  : this help screen
 
@@ -26,14 +27,15 @@ Usage: eatmemory [ -f | --free] [ -m megabytes | --megs megabytes ] [ -q | --qui
     EATMEGS      : alternative to -m / --megs
 ```
 
-This is what it looks like on MacOS 14 using the free parameter:
+This is what it looks like on MacOS 14 using the free and random parameters:
 ```bash
-./eatmemory -f
-Limiting to 50% of availble free memory: free=26; total=16384
-using 50% of available memory 26 megabytes for a target allocation of 13 megabytes
-Consuming 13 megabytes
-+ Created 13 megabytes
-+ Allocated 13631592 bytes
+$ ./eatmemory -f -r
+Limiting to 50% of availble free memory: free=121; total=16384
+using 50% of available memory 121 megabytes for a target allocation of 60 megabytes
+Consuming 60 megabytes
++ randomizing memory enabled
++ Created 60 megabytes
++ Allocated 62915040 bytes
 ++ Looped: 1
 ++ Looped: 2
 ++ Looped: 3

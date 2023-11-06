@@ -1,6 +1,8 @@
 # eatmemory
 Small program that I released in the Public Domain in 2003 to chew memory
 
+[![Docker Repository on Quay](https://quay.io/repository/gonoph/eatmemory/status "Docker Repository on Quay")](https://quay.io/repository/gonoph/eatmemory)
+
 # Build
 You should just need to run make:
 

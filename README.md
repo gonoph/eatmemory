@@ -30,7 +30,7 @@ Usage: eatmemory [ -f | --free] [ -m megabytes | --megs megabytes ] [ -q | --qui
 This is what it looks like on MacOS 14 using the free and random parameters:
 ```bash
 $ ./eatmemory -f -r
-Limiting to 50% of availble free memory: free=121; total=16384
+Limiting to 50% of available free memory: free=121; total=16384
 using 50% of available memory 121 megabytes for a target allocation of 60 megabytes
 Consuming 60 megabytes
 + randomizing memory enabled
@@ -47,7 +47,7 @@ Consuming 60 megabytes
 This is what it looks like running on a podman container with memory limits:
 ```bash
 podman run --rm -it -v `pwd`:/compile:z --workdir=/compile --memory=500m registry.redhat.io/ubi9:latest ./eatmemory -f
-Limiting to 50% of availble free memory: free=500; total=500
+Limiting to 50% of available free memory: free=500; total=500
 using 50% of available memory 500 megabytes for a target allocation of 250 megabytes
 Consuming 250 megabytes
 + detected running in a cgroup with memory limits.

@@ -51,7 +51,7 @@ void parse_megabytes(const char *source) {
         if (eat_flags.flag_free) {
             if (pct >= 100) pct = 99;
             megabytes = (avail_memory) * pct / 100;
-            info("Limiting to %d%% of availble free memory: free=%lu; total=%lu\n", pct, avail_memory, total_memory);
+            info("Limiting to %d%% of available free memory: free=%lu; total=%lu\n", pct, avail_memory, total_memory);
         } else {
             megabytes = total_memory * pct / 100;
         };

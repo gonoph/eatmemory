@@ -1,4 +1,3 @@
-#include "eatmemory.h"
 #include "args.h"
 #include "sys_info.h"
 #include "error.h"
@@ -8,6 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+eat_flags_t eat_flags = { 0, 0, 0, 0, 0, 0, 0L, 0L };
 
 static const struct option longopts[] = {
   { "free",   no_argument,       NULL, 'f' },

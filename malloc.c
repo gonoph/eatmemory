@@ -1,7 +1,10 @@
 #include <string.h>
 
-#include "eatmemory.h"
 #include "error.h"
+#include "args.h"
+
+const int CHUNK = 1 << 20;
+char **bigarray=NULL;
 
 char **CreateLargeArray(unsigned long megs)
 {
@@ -17,6 +20,16 @@ char **CreateLargeArray(unsigned long megs)
     return(largearray);
 }
 
+char **CleanLargeArray(char **largearray)
+{
+    info("- Freeing chunk array: ");
+    if (largearray) {
+        free(largearray);
+    }
+    info("complete\n");
+    return NULL;
+}
+
 // return a full unsigned long random number
 unsigned long mksalt(void) {
     unsigned long salt;
@@ -25,7 +38,7 @@ unsigned long mksalt(void) {
     return salt;
 }
 
-char **CreateLargeChunk(unsigned long chunks,char **largearray)
+char **CreateLargeChunks(unsigned long chunks,char **largearray)
 {
     unsigned long looper1;
 
@@ -34,14 +47,14 @@ char **CreateLargeChunk(unsigned long chunks,char **largearray)
      * should be able to consume >4GB of memory. */
     for(looper1=0;looper1<chunks;looper1++)
     {
-    largearray[looper1]=malloc((CHUNK));
-    if (!largearray[looper1]) {
-        if (eat_flags.flag_pct && eat_flags.megs >= 100) {
-            fprintf(stderr, "[warn] malloc unable to allocate chunk: ");
-            perror(NULL);
-            return(largearray);
-        } else 
-            err("[error] Unable to malloc() %lu chunks.\n", chunks);
+        largearray[looper1]=malloc((CHUNK));
+        if (!largearray[looper1]) {
+            if (eat_flags.flag_pct && eat_flags.megs >= 100) {
+                fprintf(stderr, "[warn] malloc unable to allocate chunk: ");
+                perror(NULL);
+                return(largearray);
+            } else 
+                err("[error] Unable to malloc() %lu chunks.\n", chunks);
     }
 
     if (eat_flags.flag_random) {
@@ -60,6 +73,19 @@ char **CreateLargeChunk(unsigned long chunks,char **largearray)
     eat_flags.allocated += CHUNK;
     }
     return(largearray);
+}
+
+char **CleanLargeChunks(unsigned long chunks, char **largearray)
+{
+    unsigned long looper1;
+    info("-- Freeing %lu megs: ", chunks);
+    for (looper1=0;looper1<chunks;looper1++)
+    {
+        free(largearray[looper1]);
+        largearray[looper1]=NULL;
+    }
+    info("complete\n");
+    return largearray;
 }
 
 // vim: sw=4 cindent expandtab tabstop=4 :

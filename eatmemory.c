@@ -10,20 +10,14 @@
 #include <getopt.h>
 #include <unistd.h>
 
-#include "eatmemory.h"
 #include "malloc.h"
 #include "args.h"
 #include "cleanup.h"
 #include "error.h"
 #include "sys_info.h"
 
-const int CHUNK = 1 << 20;
-
-eat_flags_t eat_flags = { 0, 0, 0, 0, 0, 0, 0L, 0L };
-
 int main(int argc,char **argv)
 {
-    char **bigarray=NULL;
     unsigned long looper1;
     fd_set empty_stdin, empty_stdout, empty_stderr;
     struct timeval waittv;
@@ -42,7 +36,7 @@ int main(int argc,char **argv)
 
     bigarray=CreateLargeArray(eat_flags.megs);  /* create my array of chunks */
 
-    CreateLargeChunk(eat_flags.megs, bigarray); /* fill in the array with actual chunks */
+    CreateLargeChunks(eat_flags.megs, bigarray); /* fill in the array with actual chunks */
 
     info("+ Created %u megabytes\n", eat_flags.megs);
     info("+ Allocated %lu bytes\n", eat_flags.allocated);

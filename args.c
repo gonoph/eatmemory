@@ -22,7 +22,7 @@ static const struct option longopts[] = {
 #define ARGS_DEFAULT "50%"
 
 void help(void) {
-  fprintf(stderr, "Usage: eatmemory [ -f | --free] [ -m metabytes | --megs megabytes ] [ -q | --quiet ] [ -h | --help ]\n\
+  fprintf(stderr, "Usage: eatmemory [ -fqrh ] [ -m metabytes ]\n\
     -f | --free  : attempt to only allocate free memory\n\
     -m | --megs  : the number of megabytes to consume (default %s)\n\
                    when %% is 100%% or more, all available RAM will be consumed.\n\

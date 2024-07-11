@@ -4,7 +4,7 @@ MAINTAINER billy@gonoph.net
 ARG COMMAND=eatmemory
 # install packages, but ensure it's only UBI content
 RUN	(test -r /etc/dnf/plugins/subscription-manager.conf \
-	&& sed -i 's/enabled=1/enabled=0/' /etc/dnf/plugins/subscription-manager.confs)  \
+	&& sed -i 's/enabled=1/enabled=0/' /etc/dnf/plugins/subscription-manager.conf)  \
 	|| true \
 	&& rm -f /etc/yum.repos.d/redhat.repo \ 
 	&& microdnf -y install make gcc findutils \

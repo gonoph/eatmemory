@@ -1,4 +1,3 @@
-#include "eatmemory.h"
 #include "args.h"
 #include "sys_info.h"
 #include "error.h"
@@ -8,6 +7,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+eat_flags_t eat_flags = { 0, 0, 0, 0, 0, 0, 0L, 0L };
 
 static const struct option longopts[] = {
   { "free",   no_argument,       NULL, 'f' },
@@ -21,7 +22,7 @@ static const struct option longopts[] = {
 #define ARGS_DEFAULT "50%"
 
 void help(void) {
-  fprintf(stderr, "Usage: eatmemory [ -f | --free] [ -m metabytes | --megs megabytes ] [ -q | --quiet ] [ -h | --help ]\n\
+  fprintf(stderr, "Usage: eatmemory [ -fqrh ] [ -m metabytes ]\n\
     -f | --free  : attempt to only allocate free memory\n\
     -m | --megs  : the number of megabytes to consume (default %s)\n\
                    when %% is 100%% or more, all available RAM will be consumed.\n\

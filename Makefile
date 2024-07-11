@@ -5,7 +5,7 @@ LDFLAGS :=
 STRIP=/usr/bin/strip
 
 CFILES := args.c cleanup.c eatmemory.c malloc.c sys_info.c
-HFILES := args.h cleanup.h eatmemory.h malloc.h sys_info.h
+HFILES := args.h cleanup.h malloc.h sys_info.h
 OFILES := args.o cleanup.o eatmemory.o malloc.o sys_info.o
 
 all: eatmemory

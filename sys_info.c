@@ -26,6 +26,8 @@ unsigned long read_from_stream(FILE * __restrict stream, const char * __restrict
         matches = sscanf(BUFFER, "%lu", &number);
     }
 
+    if (BUFFER) free(BUFFER);
+
     if (matches == 0 || matches == EOF) return 0;
 
     return number;

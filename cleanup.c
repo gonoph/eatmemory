@@ -3,11 +3,15 @@
 #include <stdlib.h>
 
 #include "cleanup.h"
+#include "malloc.h"
+#include "args.h"
 
 void sig_handler(int sig) {
     signal(SIGINT, SIG_IGN);
     signal(SIGTERM, SIG_IGN);
     signal(SIGHUP, SIG_IGN);
+    bigarray = CleanLargeChunks(eat_flags.megs, bigarray);
+    bigarray = CleanLargeArray(bigarray);
     fprintf(stderr, "[exiting] Caught signal %d\n", sig);
     exit(0);
 }
